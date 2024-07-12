@@ -1,6 +1,7 @@
-import Dishes from "@/components/global/Dishes";
 import Navbar from "@/components/global/Navbar";
 import React, { useEffect, useState } from "react";
+import { socket } from "./socket";
+import Dish from "@/components/global/Dish";
 
 const App = () => {
   const [dishes, setDishes] = useState([]);
@@ -11,12 +12,25 @@ const App = () => {
     const data = await res.json();
     setDishes(data.dishes);
     setLoading(false);
-    console.log(data);
+  };
+
+  const handleUpdates = (updated_document) => {
+    const new_dishes = dishes.map((dish) =>
+      dish.dishId == updated_document.dishId ? updated_document : dish
+    );
+    setDishes(new_dishes);
   };
 
   useEffect(() => {
     fetchDishes();
   }, []);
+
+  useEffect(() => {
+    socket.on("updated_document", handleUpdates);
+    return () => {
+      socket.off("updated_document", handleUpdates);
+    };
+  }, [dishes]);
 
   if (loading) {
     return (
@@ -44,7 +58,13 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <Dishes dishes={dishes} />
+      <div className="flex gap-10 flex-wrap py-10 px-10">
+        {dishes.map((dish, index) => (
+          <div key={index}>
+            <Dish dish={dish} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
