@@ -22,7 +22,6 @@ const listener = (io) => {
     const pipeline = [];
     changeStream = dishes.watch(pipeline, options);
     changeStream.on("change", (event) => {
-      console.log(event);
       if (event.operationType === "update") {
         const fullDocument = event.fullDocument;
         io.emit("updated_document", fullDocument);
