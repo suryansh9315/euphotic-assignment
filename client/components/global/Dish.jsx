@@ -7,7 +7,7 @@ const Dish = ({ dish }) => {
 
   const handleSwitch = async (id) => {
     const res = await fetch(
-      `http://localhost:8080/api/dishes/toggleStatus/${id}`
+      `https://euphotic-assignment.onrender.com/api/dishes/toggleStatus/${id}`
     );
     const data = await res.json();
     if (res.status === 200) {

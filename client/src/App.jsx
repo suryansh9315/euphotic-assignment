@@ -8,7 +8,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchDishes = async () => {
-    const res = await fetch("http://localhost:8080/api/dishes");
+    const res = await fetch("https://euphotic-assignment.onrender.com/api/dishes");
     const data = await res.json();
     setDishes(data.dishes);
     setLoading(false);
